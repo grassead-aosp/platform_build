@@ -1952,7 +1952,7 @@ ifdef BOARD_KERNEL_DTS
 endif
 ifdef DTS_PLATFORM
 	$(hide) mkdir -p $(zip_root)/RADIO;
-	$(hide) $(ACP) $(PRODUCT_OUT)/u-boot-$(DTS_PLATFORM).imx $(zip_root)/RADIO/bootloader.img
+#	$(hide) $(ACP) $(PRODUCT_OUT)/u-boot-$(DTS_PLATFORM).$(TARGET_BOOTLOADER_POSTFIX) $(zip_root)/RADIO/bootloader.img
 endif
 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
 	            mkdir -p $(zip_root)/RADIO; \
