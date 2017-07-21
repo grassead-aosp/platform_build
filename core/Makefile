@@ -1726,7 +1726,9 @@ ifeq ($(TARGET_NO_KERNEL),true)
 build_ota_package := false
 endif
 ifeq ($(recovery_fstab),)
+ifneq ($(PRODUCT_MODEL),VAR_SOM_MX6)
 build_ota_package := false
+endif
 endif
 ifeq ($(TARGET_BUILD_PDK),true)
 build_ota_package := false
@@ -2144,9 +2146,20 @@ otapackage:
 		export DTS_PLATFORM=`echo $$dtsplat | cut -d':' -f1`; \
 		DTS_BOARD=`echo $$dtsplat | cut -d':' -f2`; \
 		export BOARD_KERNEL_DTS="$(PRODUCT_OUT)/$$DTS_BOARD" ; \
+		if [ "$(PRODUCT_MODEL)" == "VAR_SOM_MX6" ]; then \
+			if [ "$$DTS_PLATFORM" == "imx6q-var-dart" ]; then \
+				export TARGET_OTA_FSTAB=/fstab.var-dart-mx6 ; \
+			else \
+				export TARGET_OTA_FSTAB=/fstab.var-som-mx6 ; \
+			fi; \
+			echo "OTA FSTAB: $$DTS_PLATFORM => $$TARGET_OTA_FSTAB"; \
+		fi; \
 		make otagenerate; \
 		OTA_PACKAGE_BOARD=$(patsubst %.zip,%-$$DTS_PLATFORM.zip,$(INTERNAL_OTA_PACKAGE_TARGET)); \
 		cp -f $(INTERNAL_OTA_PACKAGE_TARGET) $$OTA_PACKAGE_BOARD; \
+		if [ "$(PRODUCT_MODEL)" == "VAR_SOM_MX6" ]; then \
+			unset TARGET_OTA_FSTAB; \
+		fi; \
 	done
 
 
